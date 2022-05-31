@@ -11,6 +11,7 @@ public:
 	bool operator!=(const monom& m) const;
 	bool operator>(const monom& m) const;
 	monom operator+(const monom& m) const;
+	monom operator-(const monom& m) const;
 	monom operator*(const monom& m) const;
 	monom operator*(const double q) const;
 	friend ostream& operator<<(ostream& out, const monom& m);

@@ -74,6 +74,11 @@ void list<T>::add(T& v)
 	{
 		p = p->next;
 	}
+	if ((p->next != nullptr) && (p->next->v == v))
+	{
+		p->next->v = p->next->v + v;
+		return;
+	}
 	n->next = p->next;
 	p->next = n;
 	return;

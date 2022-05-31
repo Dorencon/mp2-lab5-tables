@@ -10,12 +10,12 @@ monom::monom(double k, int xyz) : k(k), xyz(xyz)
 
 bool monom::operator==(const monom& m) const
 {
-	return ((k == m.k) && (xyz == m.xyz));
+	return (xyz == m.xyz);
 }
 
 bool monom::operator!=(const monom& m) const
 {
-	return !this->operator==(m);
+	return !((k == m.k) && (xyz == m.xyz));
 }
 
 bool monom::operator>(const monom& m) const
@@ -26,6 +26,11 @@ bool monom::operator>(const monom& m) const
 monom monom::operator+(const monom& m) const
 {
 	return monom(k + m.k, xyz);
+}
+
+monom monom::operator-(const monom& p) const
+{
+	return this->operator+(p * -1);
 }
 
 monom monom::operator*(const monom& m) const
