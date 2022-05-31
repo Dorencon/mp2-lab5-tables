@@ -13,6 +13,7 @@ struct cellO
 	{
 		data = d;
 		key = k;
+		h = 0;
 		left = NULL;
 		right = NULL;
 		parent = NULL;
@@ -131,11 +132,11 @@ public:
 		{
 			ct++;
 			int hh = get_h(t->right) - get_h(t->left);
-			if (abs(hh) >= 2)
+			if (abs(hh) == 2)
 			{
 				if (hh > 0)
 				{
-					if (get_h(t->right->left) - get_h(t->right->right) == 1)
+					if (get_h(t->right->left) - get_h(t->right->right) == -1)
 					{
 						this->rotateL(t);
 					}
@@ -147,7 +148,7 @@ public:
 				}
 				else
 				{
-					if (get_h(t->left->right) - get_h(t->left->left) == 1)
+					if (get_h(t->left->right) - get_h(t->left->left) == -1)
 					{
 						this->rotateR(t);
 					}
@@ -159,6 +160,7 @@ public:
 				}
 			}
 			t->h = max(get_h(t->right), get_h(t->left)) + 1;
+			first = t;
 			t = t->parent;
 		}
 		return ct;
