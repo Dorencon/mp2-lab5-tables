@@ -1,3 +1,5 @@
+#include <vector>
+
 using namespace std;
 
 template <typename T>
@@ -21,47 +23,71 @@ public:
 	{
 		Msize = size;
 		this->size = 0;
-		table = new cellH<T>*[size];
-		for (size_t i = 0; i < size; i++)
-		{
-			table[i] = nullptr;
-		}
+		table = new vector<cellH<T>*>[size];
 	}
 	void add(T data, int key)
 	{
-		if (Msize == size)
-		{
-			throw exception("Low memory");
-		}
 		cellH<T>* t = new cellH<T>(data, key);
-		table[key % Msize] = t;
-		size++;
+		if (table[key % Msize].size() == 0)
+		{
+			size++;
+		}
+		table[key % Msize].push_back(t);
 		cout << "Hash add " << 1 << endl;
 	}
 	T find(int key)
 	{
-		if (table[key % Msize] == nullptr)
+		size_t ct = 0;
+		if (table[key % Msize].size() == 0)
 		{
 			throw exception("Cant find key");
 		}
-		cout << "Hash find " << 1 << endl;
-		return table[key % Msize]->data;
+		for (size_t i = 0; i < table[key % Msize].size(); i++)
+		{
+			ct++;
+			if (table[key % Msize][i]->key == key)
+			{
+				cout << "Hash find " << ct << endl;
+				return table[key % Msize][i]->data;
+			}
+		}
+		throw exception("Cant find key");
 	}
 	void del(int key)
 	{
-		if ((size == 0) || (table[key % Msize] == nullptr))
+		size_t ct = 0;
+		if ((size == 0) || (table[key % Msize].size() == 0))
 		{
 			throw exception("Nothing to delete");
 		}
-		table[key % Msize] = nullptr;
-		size--;
-		cout << "Hash delete " << 1 << endl;
+		size_t t = table[key % Msize].size();
+		for (size_t i = 0; i < table[key % Msize].size(); i++)
+		{
+			ct++;
+			if (table[key % Msize][i]->key == key)
+			{
+				t = i;
+				break;
+			}
+		}
+		if (t == table[key % Msize].size())
+		{
+			throw exception("Nothing to delete");
+		}
+		ct++;
+		table[key % Msize][t] = table[key % Msize][table[key % Msize].size() - 1];
+		table[key % Msize].pop_back();
+		if (!table[key % Msize].size())
+		{
+			size--;
+		}
+		cout << "Hash delete " << ct << endl;
 	}
 	size_t get_size()
 	{
 		return size;
 	}
 private:
-	cellH<T>** table;
+	vector<cellH<T>*>* table;
 	size_t Msize, size;
 };

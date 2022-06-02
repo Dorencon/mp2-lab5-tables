@@ -53,11 +53,8 @@ public:
 			}
 			ct++;
 		}
-		for (size_t i = t + 1; i < size; i++)
-		{
-			ct++;
-			table[i - 1] = table[i];
-		}
+		ct++;
+		table[t] = table[size - 1];
 		table[size - 1] = NULL;
 		size--;
 		cout << "Unordered delete " << ct << endl;

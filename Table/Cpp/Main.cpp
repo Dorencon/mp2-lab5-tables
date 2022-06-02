@@ -48,16 +48,7 @@ int main()
 			cout << "From console?" << endl;
 			string c;
 			getline(cin, c);
-			if (c == "N")
-			{
-				cin >> key;
-				getline(cin, sp);
-				u.add(pv[pv.size() - 1], key);
-				o.add(key, pv[pv.size() - 1]);
-				h.add(pv[pv.size() - 1], key);
-				pv.pop_back();
-			}
-			else
+			if (c == "Y")
 			{
 				polynom pol;
 				cin >> key;
@@ -66,6 +57,22 @@ int main()
 				u.add(pol, key);
 				o.add(key, pol);
 				h.add(pol, key);
+			}
+			else
+			{
+				if (pv.size() == 0)
+				{
+					cout << "No polynoms in queue" << endl;
+				}
+				else
+				{
+					cin >> key;
+					getline(cin, sp);
+					u.add(pv[pv.size() - 1], key);
+					o.add(key, pv[pv.size() - 1]);
+					h.add(pv[pv.size() - 1], key);
+					pv.pop_back();
+				}
 			}
 		}
 		else if (s == "del")
@@ -91,27 +98,48 @@ int main()
 			getline(cin, c);
 			if (c == "+")
 			{
-				pv[pv.size() - 2] = pv[pv.size() - 1] + pv[pv.size() - 2];
-				pv.pop_back();
-				cout << pv[pv.size() - 1];
-			}
-			else if (c == "*")
-			{
-				cout << "Multiply by a polynomial?" << endl;
-				getline(cin, c);
-				if (c == "Y")
+				if (pv.size() <= 1)
+				{
+					cout << "Not enough polynoms in queue" << endl;
+				}
+				else
 				{
 					pv[pv.size() - 2] = pv[pv.size() - 1] + pv[pv.size() - 2];
 					pv.pop_back();
 					cout << pv[pv.size() - 1];
 				}
+			}
+			else if (c == "*")
+			{
+				if (pv.size() == 0)
+				{
+					cout << "No polynoms in queue" << endl;
+				}
 				else
 				{
-					double q;
-					cin >> q;
-					getline(cin, sp);
-					pv[pv.size() - 1] = pv[pv.size() - 1] * q;
-					cout << pv[pv.size() - 1];
+					cout << "Multiply by a polynomial?" << endl;
+					getline(cin, c);
+					if (c == "Y")
+					{
+						if (pv.size() <= 1)
+						{
+							cout << "Not enough polynoms in queue" << endl;
+						}
+						else
+						{
+							pv[pv.size() - 2] = pv[pv.size() - 1] + pv[pv.size() - 2];
+							pv.pop_back();
+							cout << pv[pv.size() - 1];
+						}
+					}
+					else
+					{
+						double q;
+						cin >> q;
+						getline(cin, sp);
+						pv[pv.size() - 1] = pv[pv.size() - 1] * q;
+						cout << pv[pv.size() - 1];
+					}
 				}
 			}
 		}
