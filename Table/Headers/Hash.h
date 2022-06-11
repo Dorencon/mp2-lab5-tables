@@ -49,7 +49,7 @@ public:
 			while (true)
 			{
 				ct++;
-				hs = (hs + (key / 2) % Msize) % Msize;
+				hs = (hs + (key / 2) % Msize + 1) % Msize;
 				if (table[hs] == NULL)
 				{
 					table[hs] = t;
@@ -71,7 +71,7 @@ public:
 			{
 				break;
 			}
-			hs = (hs + (key / 2) % Msize) % Msize;
+			hs = (hs + (key / 2) % Msize + 1) % Msize;
 		}
 		if (ct == Msize)
 		{
@@ -98,6 +98,7 @@ public:
 				cout << "Hash delete " << ct << endl;
 				return;
 			}
+			hs = (hs + (key / 2) % Msize + 1) % Msize;
 		}
 		throw exception("Nothing to delete");
 	}
