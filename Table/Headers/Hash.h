@@ -50,7 +50,7 @@ public:
 			{
 				ct++;
 				hs = (hs + (key / 2) % Msize) % Msize;
-				if (table[hs] != NULL)
+				if (table[hs] == NULL)
 				{
 					table[hs] = t;
 					size++;
