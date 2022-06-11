@@ -23,71 +23,89 @@ public:
 	{
 		Msize = size;
 		this->size = 0;
-		table = new vector<cellH<T>*>[size];
+		table = new cellH<T>*[size];
+		for (size_t i = 0; i < size; i++)
+		{
+			table[i] = NULL;
+		}
 	}
 	void add(T data, int key)
 	{
-		cellH<T>* t = new cellH<T>(data, key);
-		if (table[key % Msize].size() == 0)
+		if (size == Msize)
 		{
-			size++;
+			throw exception("Low memory");
 		}
-		table[key % Msize].push_back(t);
-		cout << "Hash add " << 1 << endl;
+		cellH<T>* t = new cellH<T>(data, key);
+		if (table[key % Msize] == NULL)
+		{
+			table[key % Msize] = t;
+			size++;
+			cout << "Hash add " << 1 << endl;
+		}
+		else
+		{
+			size_t ct = 0;
+			int hs = key % Msize;
+			while (true)
+			{
+				ct++;
+				hs = (hs + (key / 2) % Msize) % Msize;
+				if (table[hs] != NULL)
+				{
+					table[hs] = t;
+					size++;
+					cout << "Hash add " << ct << endl;
+					return;
+				}
+			}
+		}
 	}
 	T find(int key)
 	{
 		size_t ct = 0;
-		if (table[key % Msize].size() == 0)
+		int hs = key % Msize;
+		while (ct < Msize)
+		{
+			ct++;
+			if ((table[hs] != NULL) && (table[hs]->key == key))
+			{
+				break;
+			}
+			hs = (hs + (key / 2) % Msize) % Msize;
+		}
+		if (ct == Msize)
 		{
 			throw exception("Cant find key");
 		}
-		for (size_t i = 0; i < table[key % Msize].size(); i++)
-		{
-			ct++;
-			if (table[key % Msize][i]->key == key)
-			{
-				cout << "Hash find " << ct << endl;
-				return table[key % Msize][i]->data;
-			}
-		}
-		throw exception("Cant find key");
+		cout << "Hash find " << ct << endl;
+		return table[hs]->data;
 	}
 	void del(int key)
 	{
 		size_t ct = 0;
-		if ((size == 0) || (table[key % Msize].size() == 0))
+		if (size == 0)
 		{
 			throw exception("Nothing to delete");
 		}
-		size_t t = table[key % Msize].size();
-		for (size_t i = 0; i < table[key % Msize].size(); i++)
+		int hs = key % Msize;
+		while (ct < Msize)
 		{
 			ct++;
-			if (table[key % Msize][i]->key == key)
+			if ((table[hs] != NULL) && (table[hs]->key == key))
 			{
-				t = i;
-				break;
+				table[hs] = NULL;
+				size--;
+				cout << "Hash delete " << ct << endl;
+				return;
 			}
 		}
-		if (t == table[key % Msize].size())
-		{
-			throw exception("Nothing to delete");
-		}
-		ct++;
-		table[key % Msize][t] = table[key % Msize][table[key % Msize].size() - 1];
-		table[key % Msize].pop_back();
-		if (!table[key % Msize].size())
-		{
-			size--;
-		}
-		cout << "Hash delete " << ct << endl;
+		throw exception("Nothing to delete");
 	}
 	size_t get_size()
 	{
 		return size;
 	}
 private:
-	vector<cellH<T>*>* table;
+	cellH<T>** table;
 	size_t Msize, size;
 };
